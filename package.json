@@ -1,0 +1,24 @@
+{
+  "name": "youtube-clone-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "dev": "nodemon src/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/abu-rayhan-kobir/youtube-clone-backend.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/abu-rayhan-kobir/youtube-clone-backend/issues"
+  },
+  "homepage": "https://github.com/abu-rayhan-kobir/youtube-clone-backend#readme",
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}
