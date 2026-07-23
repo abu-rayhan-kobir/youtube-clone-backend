@@ -20,5 +20,8 @@
   "homepage": "https://github.com/abu-rayhan-kobir/youtube-clone-backend#readme",
   "devDependencies": {
     "nodemon": "^3.1.14"
+  },
+  "dependencies": {
+    "dotenv": "^17.4.2"
   }
 }
