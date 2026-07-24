@@ -3,6 +3,7 @@ import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import constants from "./constants.js";
+import userRouter from "./routes/user.routes.js";
 const app = express();
 
 
@@ -29,6 +30,7 @@ app.get("/", (request, response) => {
   return response.send("Server running...");
 });
 
+app.use("/api/v1/users", userRouter);
 
 
 export default app;
