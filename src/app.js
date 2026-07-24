@@ -2,6 +2,7 @@ import env from "./config/env.js";
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import constants from "./constants.js";
 const app = express();
 
 
@@ -11,12 +12,12 @@ app.use(cors({
 }));
 
 app.use(express.json({
-  limit: "16kb",
+  limit: constants.limit,
 }));
 
 app.use(express.urlencoded({
   extended: true,
-  limit: "16kb",
+  limit: constants.limit,
 }));
 
 app.use(express.static("public"));
