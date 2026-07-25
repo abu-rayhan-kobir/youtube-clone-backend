@@ -27,14 +27,23 @@ const registerUser = asyncHandler(async (request, response) => {
   if (existedUser) {
     throw new ApiError(409, "User with email or username already exist!");
   }
+
   const avatarLocalPath = request.files?.avatar[0]?.path;
-  const coverImageLocalPath = request.files?.coverImage[0]?.path;
 
   if (!avatarLocalPath) {
     throw new ApiError(400, "Avatar file is required!");
   }
 
   const avatar = await uploadOnCloudinary(avatarLocalPath);
+
+  let coverImageLocalPath;
+  if (
+    request.files &&
+    Array.isArray(request.files.coverImage) &&
+    request.files.coverImage.length > 0
+  ) {
+    coverImageLocalPath = request.files.coverImage[0].path;
+  }
   const coverImage = await uploadOnCloudinary(coverImageLocalPath);
 
   if (!avatar) {
@@ -56,9 +65,9 @@ const registerUser = asyncHandler(async (request, response) => {
   if (!createdUser) {
     throw new ApiError(500, "Something went wrong while registering the user!");
   }
-  return response.status(201).json(
-    new ApiResponse(200, createdUser, "User successfully registered!"),
-  );
+  return response
+    .status(201)
+    .json(new ApiResponse(200, createdUser, "User successfully registered!"));
 });
 
 const loginUser = asyncHandler(async (request, response) => {
