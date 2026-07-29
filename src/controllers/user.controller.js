@@ -6,6 +6,7 @@ import ApiResponse from "../utils/ApiResponse.js";
 
 const registerUser = asyncHandler(async (request, response) => {
   const { username, fullName, email, password } = request.body;
+  
   if (
     [username, fullName, email, password].some((field) => {
       return field?.trim() === "";
@@ -29,13 +30,10 @@ const registerUser = asyncHandler(async (request, response) => {
   }
 
   const avatarLocalPath = request.files?.avatar[0]?.path;
-
   if (!avatarLocalPath) {
     throw new ApiError(400, "Avatar file is required!");
   }
-
   const avatar = await uploadOnCloudinary(avatarLocalPath);
-
   let coverImageLocalPath;
   if (
     request.files &&
@@ -45,7 +43,6 @@ const registerUser = asyncHandler(async (request, response) => {
     coverImageLocalPath = request.files.coverImage[0].path;
   }
   const coverImage = await uploadOnCloudinary(coverImageLocalPath);
-
   if (!avatar) {
     throw new ApiError(400, "Avatar file is required!");
   }
