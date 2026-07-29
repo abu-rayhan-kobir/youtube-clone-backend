@@ -10,11 +10,11 @@ const generateAccessAndRefreshTokens = async (userId) => {
     const accessToken = user.generateAccessToken();
     const refreshToken = user.generateRefreshToken();
     user.refreshToken = refreshToken;
-    await user.save({validateBeforeSave: false});
+    await user.save({ validateBeforeSave: false });
     return {
       accessToken,
       refreshToken,
-    }
+    };
   } catch (error) {
     throw new ApiError(
       500,
@@ -106,28 +106,55 @@ const loginUser = asyncHandler(async (request, response) => {
     throw new ApiError(401, "Password was incorrect!");
   }
 
-  const {accessToken, refreshToken} = await generateAccessAndRefreshTokens(user._id);
+  const { accessToken, refreshToken } = await generateAccessAndRefreshTokens(
+    user._id,
+  );
 
-  const loggedInUser = await User.findById(user._id).select("-password -refreshToken");
+  const loggedInUser = await User.findById(user._id).select(
+    "-password -refreshToken",
+  );
 
   const options = {
     httpOnly: true,
     secure: true,
-  }
+  };
 
-  return response.status(200).cookie("accessToken", accessToken, options).cookie("refreshToken", refreshToken).json(
-    new ApiResponse(
-      200,
-      {
-        user: loggedInUser, accessToken, refreshToken,
-      },
-      "User logged in successfully!"
-    )
-  );
+  return response
+    .status(200)
+    .cookie("accessToken", accessToken, options)
+    .cookie("refreshToken", refreshToken)
+    .json(
+      new ApiResponse(
+        200,
+        {
+          user: loggedInUser,
+          accessToken,
+          refreshToken,
+        },
+        "User logged in successfully!",
+      ),
+    );
 });
 
 const logoutUser = asyncHandler(async (request, response) => {
-  
+  await User.findByIdAndUpdate(
+    request.user._id,
+    {
+      $set: {
+        refreshToken: undefined,
+      },
+    },
+    {
+      new: true,
+    },
+  );
+  const options = {
+    httpOnly: true,
+    secure: true,
+  };
+  return response.status(200).clearCookie("accessToken", options).clearCookie("refreshToken", options).json(
+    new ApiResponse(200, {}, "User successfully loggedIn!")
+  );
 });
 
-export { registerUser, loginUser };
+export { registerUser, loginUser, logoutUser };
