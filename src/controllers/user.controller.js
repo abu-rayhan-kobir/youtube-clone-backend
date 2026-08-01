@@ -423,6 +423,15 @@ const getWatchHistory = asyncHandler(async (request, response) => {
       },
     },
   ]);
+  return response
+    .status(200)
+    .json(
+      new ApiResponse(
+        200,
+        user[0].watchHistory,
+        "Watch history fetched successfully!",
+      ),
+    );
 });
 
 export {
